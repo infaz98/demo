@@ -1,5 +1,6 @@
 ﻿using ApplicationLayer.Interfaces;
 using AutoMapper;
+using DomainLayer.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.Models;
@@ -8,22 +9,42 @@ namespace PresentationLayer.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IProductService _productService;
         public readonly IMapper _mapper;
 
-        public ProductController(IProductRepository productRepository,
-             IMapper mapper)
+        public ProductController(
+             IMapper mapper,
+             IProductService productService
+            )
         {
-            _productRepository = productRepository;
+            _productService = productService;   
             _mapper = mapper;
         }
 
         // GET: ProductController
-        public async Task<IActionResult> IndexAsync()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            var products = await _productRepository.ListAllAsync();
+            var products = await _productService.GetAllProduts();
             var mappedProducts = _mapper.Map<List<ProductViewModel>>(products);
             ViewData["products"] = mappedProducts;
+            return View();
+        }
+
+        // POST: ProductController
+        [HttpPost]
+		public async Task<IActionResult> Index(ProductViewModel productViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var product = _mapper.Map<Product>(productViewModel);
+                await _productService.CreateProduct(product);
+            }
+
+            var products = await _productService.GetAllProduts();
+            var mappedProducts = _mapper.Map<List<ProductViewModel>>(products);
+            ViewData["products"] = mappedProducts;
+
             return View();
         }
 
@@ -33,36 +54,11 @@ namespace PresentationLayer.Controllers
             return View();
         }
 
-        // GET: ProductController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
 
-        // POST: ProductController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ProductController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+ 
 
         // POST: ProductController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
         {
             try
@@ -75,15 +71,8 @@ namespace PresentationLayer.Controllers
             }
         }
 
-        // GET: ProductController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
         // POST: ProductController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpDelete]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try

@@ -15,5 +15,11 @@ namespace ApplicationLayer.Services
         {
             return _productRepository.ListAllAsync();
         }
+
+        public Task<Product> CreateProduct(Product product)
+        {
+            return _productRepository.AddAsync(product);
+        }
+
     }
 }

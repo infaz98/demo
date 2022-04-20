@@ -1,9 +1,27 @@
-﻿<style>
+﻿@model ProductViewModel;
+
+<style>
 table, th, td {
   border: 1px solid;
   width: 50%;
 }
 </style>
+
+<form method="post">
+<div class="form-group row">
+       <div class="col-sm-6">
+            <input type="text" class="form-control" asp-for="Name" placeholder="Name">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" asp-for="Price" placeholder="Price">
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-info px-2 float-right" style="margin: 20px; margin-left: -3px;">Save Product</button>
+</form>
+
+
 
 <table>
   <tr>
