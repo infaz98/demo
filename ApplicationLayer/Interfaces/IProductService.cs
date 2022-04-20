@@ -6,5 +6,6 @@ namespace ApplicationLayer.Interfaces
     {
         public Task<List<Product>> GetAllProduts();
         public Task<Product> CreateProduct(Product product);
+        public Task<int> DeleteProduct(Product product);
     }
 }

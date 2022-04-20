@@ -12,6 +12,6 @@ namespace ApplicationLayer.Interfaces
         Task<List<T>> ListAllAsync();
         Task<T> AddAsync(T entity);
         Task UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
+        Task<int> DeleteAsync(T entity);
     }
 }

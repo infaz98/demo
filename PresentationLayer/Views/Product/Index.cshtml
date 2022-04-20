@@ -21,9 +21,12 @@ table, th, td {
     <button type="submit" class="btn btn-info px-2 float-right" style="margin: 20px; margin-left: -3px;">Save Product</button>
 </form>
 
+@{
+    var products = (List<ProductViewModel>) ViewData["products"];
 
-
-<table>
+    if(products.Count > 0)
+    {
+       <table>
   <tr>
     <th>Name</th>
     <th>Price</th>
@@ -32,9 +35,24 @@ table, th, td {
   @foreach (var item in (List<ProductViewModel>) ViewData["products"])
 		{
 		<tr>
+            <form method="post" asp-controller="Product" asp-action="Delete">
 			<td>@item.Name</td>
 			<td>@item.Price</td>
+            <input type="hidden" class="form-control" asp-for="Id" value="@item.Id">
+            <input type="hidden" class="form-control" asp-for="Name" value="@item.Name">
+            <input type="hidden" class="form-control" asp-for="Price" value="@item.Price">
+            <td>
+                <button type="submit" class="btn btn-danger" style="margin: 5px 2px 5px 2px;">Delete</button>
+            </td>
+            </form>
 		</tr>
 		}
+        </table>
+    }
+    else
+    {
+        <h5>No Products to Display</h5>
+    }
+}
 
-</table>
+

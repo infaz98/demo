@@ -12,14 +12,14 @@ namespace DataLayer.Repositories
             _dataContext = dbContext;
         }
 
-        public virtual async Task<T> GetByIdAsync<TId>(TId id)
+        public async Task<T> GetByIdAsync<TId>(TId id)
         {
             return await _dataContext.Set<T>().FindAsync(id);
         }
 
-        public virtual Task<List<T>> ListAllAsync()
+        public async Task<List<T>> ListAllAsync()
         {
-            return _dataContext.Set<T>().ToListAsync();
+            return await _dataContext.Set<T>().ToListAsync();
         }
 
         public async Task<T> AddAsync(T entity)
@@ -30,15 +30,15 @@ namespace DataLayer.Repositories
             return entity;
         }
 
-        public virtual async Task UpdateAsync(T entity)
-        {
-            _dataContext.Entry(entity).State = EntityState.Modified;
-            await _dataContext.SaveChangesAsync();
-        }
-
-        public virtual async Task DeleteAsync(T entity)
+        public async Task<int> DeleteAsync(T entity)
         {
             _dataContext.Set<T>().Remove(entity);
+            return await _dataContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(T entity)
+        {
+            _dataContext.Entry(entity).State = EntityState.Modified;
             await _dataContext.SaveChangesAsync();
         }
     }

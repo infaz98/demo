@@ -21,5 +21,9 @@ namespace ApplicationLayer.Services
             return _productRepository.AddAsync(product);
         }
 
-    }
+		public Task<int> DeleteProduct(Product product)
+		{   
+             return _productRepository.DeleteAsync(product);	
+		}
+	}
 }

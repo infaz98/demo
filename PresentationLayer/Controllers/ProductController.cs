@@ -48,32 +48,31 @@ namespace PresentationLayer.Controllers
             return View();
         }
 
-        // GET: ProductController/Details/5
-        public ActionResult Details(int id)
+        [HttpPost]
+        public async Task<IActionResult> Delete(ProductViewModel productViewModel)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var product = _mapper.Map<Product>(productViewModel);
+                await _productService.DeleteProduct(product);
+            }
+
+            var products = await _productService.GetAllProduts();
+            var mappedProducts = _mapper.Map<List<ProductViewModel>>(products);
+            ViewData["products"] = mappedProducts;
+
+            return RedirectToAction("Index");
         }
 
-
- 
+        // GET: ProductController/Details/5
+        public IActionResult Details(int id)
+        {
+            return RedirectToAction("Product");
+        }
 
         // POST: ProductController/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // POST: ProductController/Delete/5
-        [HttpDelete]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
