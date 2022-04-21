@@ -1,4 +1,5 @@
 ﻿using API.Common;
+using Application.Modules.Product.Commands;
 using Application.Modules.Product.Models;
 using Application.Modules.Product.Queries;
 using Microsoft.AspNetCore.Mvc;
@@ -19,8 +20,16 @@ namespace API.Controllers
 			{
                 return NoContent();
             }
-
             return Ok(productDetails);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateProduct([FromBody] AddProductCommand command)
+        {
+            await Mediator.Send(command);
+            return NoContent();
         }
     }
 }
